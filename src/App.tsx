@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import './App.css';
 import MainPage from './pages/main';
@@ -14,7 +14,8 @@ class App extends React.Component {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/about_us" element={<AboutPage />} />
-          <Route path="/*" element={<Page404 />} />
+          <Route path="/404" element={<Page404 />} />
+          <Route path="*" element={<Navigate to="/404" replace />} />
         </Routes>
       </>
     );
