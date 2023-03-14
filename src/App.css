@@ -21,7 +21,24 @@
   display: flex;
   gap: 1rem;
 }
-
+.main {
+  flex-grow: 1;
+}
+.error-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+.error-header {
+  font-size: 8rem;
+  margin: 0;
+}
+.error-subheader {
+  font-size: 4rem;
+  margin: 0;
+}
 .logo {
   height: 6em;
   padding: 1.5em;
