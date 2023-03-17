@@ -16,10 +16,9 @@ class App extends React.Component<ProductsType, AppStateProps> {
       search: '',
       cards: props,
     };
-    // this.updateLocation.bind(this);
   }
   componentDidMount(): void {
-    const search = localStorage.getItem('search-field') || '';
+    const search = localStorage.getItem('search-field') ?? '';
     this.setState(
       () => ({
         location: window.location.pathname,
@@ -34,13 +33,32 @@ class App extends React.Component<ProductsType, AppStateProps> {
     );
   }
   render(): React.ReactNode {
-    console.log('data', this.props.products);
+    const cards =
+      this.state.search.length > 0
+        ? this.state.cards.products.filter(
+            //THAT SEARCH VALUE TRY TO FIND COMMON IN BRAND ,CATEGORY OR TITLE, NOT START FROM BEGIN
+            (item) =>
+              item.title.toLowerCase().includes(this.state.search.toLowerCase()) ||
+              item.brand.toLowerCase().includes(this.state.search.toLowerCase()) ||
+              item.category.toLowerCase().includes(this.state.search.toLowerCase())
+          )
+        : this.state.cards.products;
+    console.log('cards', cards);
     return (
       <>
         <Header location={this.state.location} handle={() => this.updateLocation()} />
         <main className="main">
           <Routes>
-            <Route path="/" element={<MainPage {...this.state.cards} />} />
+            <Route
+              path="/"
+              element={
+                <MainPage
+                  products={cards}
+                  onChangeSearch={this.onChangeSearch}
+                  search={this.state.search}
+                />
+              }
+            />
             <Route path="/about_us" element={<AboutPage />} />
             <Route path="/404" element={<Page404 />} />
             <Route path="*" element={<Navigate to="/404" replace />} />
@@ -55,6 +73,9 @@ class App extends React.Component<ProductsType, AppStateProps> {
       location: window.location.pathname,
     });
   }
+  onChangeSearch = (search: string) => {
+    this.setState({ search: search });
+  };
 }
 
 export default App;
