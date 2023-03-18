@@ -11,7 +11,6 @@ module.exports = {
     'prettier',
     'plugin:react-hooks/recommended',
     'plugin:prettier/recommended',
-    'react-app',
   ],
   overrides: [],
   parserOptions: {
