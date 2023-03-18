@@ -7,6 +7,7 @@ import AboutPage from './pages/About';
 import Page404 from './pages/404';
 import Footer from './components/Footer';
 import { AppStateProps, ProductsType } from 'types';
+import ErrorBoundary from './components/ErrorBoundary';
 
 class App extends React.Component<ProductsType, AppStateProps> {
   constructor(props: ProductsType) {
@@ -46,21 +47,23 @@ class App extends React.Component<ProductsType, AppStateProps> {
       <>
         <Header />
         <main className="main">
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <MainPage
-                  products={cards}
-                  onChangeSearch={this.onChangeSearch}
-                  search={this.state.search}
-                />
-              }
-            />
-            <Route path="/about_us" element={<AboutPage />} />
-            <Route path="/404" element={<Page404 />} />
-            <Route path="*" element={<Navigate to="/404" replace />} />
-          </Routes>
+          <ErrorBoundary>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <MainPage
+                    products={cards}
+                    onChangeSearch={this.onChangeSearch}
+                    search={this.state.search}
+                  />
+                }
+              />
+              <Route path="/about_us" element={<AboutPage />} />
+              <Route path="/404" element={<Page404 />} />
+              <Route path="*" element={<Navigate to="/404" replace />} />
+            </Routes>
+          </ErrorBoundary>
         </main>
         <Footer />
       </>
