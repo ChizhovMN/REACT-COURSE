@@ -1,6 +1,6 @@
+import React from 'react';
+import { MainPropsType } from 'types';
 import Card from '../components/Card';
-import React, { SetStateAction } from 'react';
-import { MainPropsType, ProductsType } from 'types';
 
 class MainPage extends React.Component<MainPropsType> {
   render(): React.ReactNode {
