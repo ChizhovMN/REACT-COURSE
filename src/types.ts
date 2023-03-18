@@ -1,4 +1,4 @@
-export type CardsType = {
+export type CardType = {
   id: number;
   title: string;
   description: string;
@@ -13,7 +13,7 @@ export type CardsType = {
 };
 
 export type ProductsType = {
-  products: CardsType[];
+  products: CardType[];
 };
 
 export type AppStateProps = {
@@ -22,6 +22,6 @@ export type AppStateProps = {
 };
 export type MainPropsType = {
   onChangeSearch: (search: string) => void;
-  products: CardsType[];
+  products: CardType[];
   search: string;
 };
