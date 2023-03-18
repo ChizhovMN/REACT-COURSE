@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 import { withRouter, WithRouterProps } from '../reactHOC';
 
 interface Props extends WithRouterProps {
@@ -13,7 +13,7 @@ class ErrorBoundary extends Component<Props, State> {
   state: State = {
     hasError: false,
   };
-  static getDerivedStateFromError(_: Error): State {
+  static getDerivedStateFromError(): State {
     return { hasError: true };
   }
 
