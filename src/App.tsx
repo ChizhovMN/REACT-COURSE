@@ -12,7 +12,6 @@ class App extends React.Component<ProductsType, AppStateProps> {
   constructor(props: ProductsType) {
     super(props);
     this.state = {
-      location: '',
       search: '',
       cards: props,
     };
@@ -21,7 +20,6 @@ class App extends React.Component<ProductsType, AppStateProps> {
     const search = localStorage.getItem('search-field') ?? '';
     this.setState(
       () => ({
-        location: window.location.pathname,
         search: search,
       }),
       () => console.log('first render')

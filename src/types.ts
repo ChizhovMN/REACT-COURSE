@@ -18,7 +18,6 @@ export type ProductsType = {
 
 export type AppStateProps = {
   search: string;
-  location: string;
   cards: ProductsType;
 };
 export type MainPropsType = {
