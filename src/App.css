@@ -128,6 +128,32 @@
   font-style: italic;
   font-weight: lighter;
 }
+.about-header {
+  font-size: 1.5rem;
+  font-style: italic;
+  font-weight: lighter;
+  text-align: left;
+  color: bisque;
+}
+
+.about-link {
+  font-size: 1rem;
+}
+.about-text {
+  font-style: italic;
+  text-align: left;
+  width: 50%;
+  line-height: 2rem;
+}
+.about-subheader {
+  text-align: right;
+}
+.subtext {
+  margin-left: auto;
+}
+.right {
+  text-align: right;
+}
 .footer {
   display: flex;
   align-items: center;
