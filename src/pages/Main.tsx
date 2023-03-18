@@ -3,8 +3,9 @@ import { MainPropsType } from 'types';
 import Card from '../components/Card';
 
 class MainPage extends React.Component<MainPropsType> {
+  onChange: React.ChangeEventHandler<HTMLInputElement> = (event) =>
+    this.props.onChangeSearch(event.target.value);
   render(): React.ReactNode {
-    const storageSearchValue = localStorage.getItem('search-field');
     return (
       <>
         <div className="search-bar">
@@ -12,12 +13,8 @@ class MainPage extends React.Component<MainPropsType> {
             type="search"
             placeholder="Type here..."
             className="search"
-            defaultValue={storageSearchValue ? storageSearchValue : ''}
-            onChange={(event) => {
-              console.log(event.target.value);
-              setTimeout(() => this.props.onChangeSearch(event.target.value), 500);
-              localStorage.setItem('search-field', event.target.value);
-            }}
+            value={this.props.search}
+            onChange={this.onChange}
           />
         </div>
         <div className="card-table">

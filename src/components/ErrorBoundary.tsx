@@ -1,5 +1,5 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { withRouter, WithRouterProps } from '../reactHOC';
+import { withRouter, WithRouterProps } from '../hocs/withRouter';
 
 interface Props extends WithRouterProps {
   children?: ReactNode;

@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { withRouter, WithRouterProps } from '../reactHOC';
+import { withRouter, WithRouterProps } from '../hocs/withRouter';
 
 class Header extends React.Component<WithRouterProps> {
   render(): React.ReactNode {
-    console.log('HEADER', this.props.location, this.props.navigate, this.props.params);
     return (
       <header className="header">
         <nav className="nav">

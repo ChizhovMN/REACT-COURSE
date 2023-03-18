@@ -17,32 +17,32 @@ class App extends React.Component<ProductsType, AppStateProps> {
       cards: props,
     };
   }
+  saveToLS = (value: string) => {
+    localStorage.setItem('search-field', value);
+  };
   componentDidMount(): void {
     const search = localStorage.getItem('search-field') ?? '';
-    this.setState(
-      () => ({
-        search: search,
-      }),
-      () => console.log('first render')
-    );
+    this.setState(() => ({
+      search,
+    }));
   }
-  componentWillUnmount(): void {
-    window.addEventListener('beforeunload', () =>
-      localStorage.setItem('search-field', this.state.search)
-    );
-  }
+
   render(): React.ReactNode {
+    const {
+      cards: { products },
+      search,
+    } = this.state;
+    const searchKey = search.toLowerCase();
     const cards =
-      this.state.search.length > 0
-        ? this.state.cards.products.filter(
-            //THAT SEARCH VALUE TRY TO FIND COMMON IN BRAND ,CATEGORY OR TITLE, NOT START FROM BEGIN
+      search.length > 0
+        ? products.filter(
+            // THAT SEARCH VALUE TRY TO FIND COMMON IN BRAND ,CATEGORY OR TITLE, NOT START FROM BEGIN
             (item) =>
-              item.title.toLowerCase().includes(this.state.search.toLowerCase()) ||
-              item.brand.toLowerCase().includes(this.state.search.toLowerCase()) ||
-              item.category.toLowerCase().includes(this.state.search.toLowerCase())
+              item.title.toLowerCase().includes(searchKey) ||
+              item.brand.toLowerCase().includes(searchKey) ||
+              item.category.toLowerCase().includes(searchKey)
           )
-        : this.state.cards.products;
-    console.log('cards', cards);
+        : products;
     return (
       <>
         <Header />
@@ -52,11 +52,7 @@ class App extends React.Component<ProductsType, AppStateProps> {
               <Route
                 path="/"
                 element={
-                  <MainPage
-                    products={cards}
-                    onChangeSearch={this.onChangeSearch}
-                    search={this.state.search}
-                  />
+                  <MainPage products={cards} onChangeSearch={this.onChangeSearch} search={search} />
                 }
               />
               <Route path="/about_us" element={<AboutPage />} />
@@ -70,7 +66,10 @@ class App extends React.Component<ProductsType, AppStateProps> {
     );
   }
   onChangeSearch = (search: string) => {
-    this.setState({ search: search });
+    this.setState(() => {
+      this.saveToLS(search);
+      return { search };
+    });
   };
 }
 

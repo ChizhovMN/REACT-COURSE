@@ -1,7 +1,7 @@
 import React from 'react';
-import { CardsType } from 'types';
+import { CardType } from 'types';
 
-class Card extends React.Component<CardsType> {
+class Card extends React.Component<CardType> {
   render(): React.ReactNode {
     return (
       <div className="card-item">
