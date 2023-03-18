@@ -46,7 +46,7 @@ class App extends React.Component<ProductsType, AppStateProps> {
     console.log('cards', cards);
     return (
       <>
-        <Header location={this.state.location} handle={() => this.updateLocation()} />
+        <Header />
         <main className="main">
           <Routes>
             <Route
@@ -67,11 +67,6 @@ class App extends React.Component<ProductsType, AppStateProps> {
         <Footer />
       </>
     );
-  }
-  updateLocation() {
-    this.setState({
-      location: window.location.pathname,
-    });
   }
   onChangeSearch = (search: string) => {
     this.setState({ search: search });
