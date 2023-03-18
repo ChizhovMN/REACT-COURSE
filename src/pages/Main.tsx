@@ -16,6 +16,7 @@ class MainPage extends React.Component<MainPropsType> {
             onChange={(event) => {
               console.log(event.target.value);
               setTimeout(() => this.props.onChangeSearch(event.target.value), 500);
+              localStorage.setItem('search-field', event.target.value);
             }}
           />
         </div>
