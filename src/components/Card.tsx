@@ -7,7 +7,7 @@ class Card extends React.Component<CardsType> {
       <div className="card-item">
         <div className="card-img">
           <div className="img-overflow">
-            <img src={this.props.thumbnail} alt={this.props.brand} className="img" />
+            <img src={this.props.thumbnail} alt={this.props.brand} className="img" loading="lazy" />
           </div>
           <div className="category">{this.props.category}</div>
           <div className="brand">{this.props.brand}</div>
