@@ -4,7 +4,7 @@ import Card from '../components/Card';
 import { render } from '@testing-library/react';
 
 describe('Card', async () => {
-  it('Should render the card correctly', () => {
+  it('Should render the card correctly with items', () => {
     const cardExample = {
       id: 1,
       title: 'title',
@@ -19,5 +19,8 @@ describe('Card', async () => {
       images: ['../public/placeholder.png'],
     };
     render(<Card {...cardExample} />);
+  });
+  it('Should render the card correctly without items', () => {
+    render(<Card {...{}} />);
   });
 });
