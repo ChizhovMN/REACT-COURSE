@@ -1,7 +1,7 @@
 import React from 'react';
-import { describe, it, expect, test } from 'vitest';
+import { describe, it } from 'vitest';
 import Card from '../components/Card';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 
 describe('Card', async () => {
   it('Should render the card correctly', () => {
