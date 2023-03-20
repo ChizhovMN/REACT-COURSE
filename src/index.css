@@ -47,6 +47,9 @@ a:focus,
 a:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+a.active {
+  color: red;
+}
 
 @media (prefers-color-scheme: light) {
   :root {
