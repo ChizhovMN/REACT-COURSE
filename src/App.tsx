@@ -56,6 +56,7 @@ class App extends React.Component<ProductsType, AppStateProps> {
                 }
               />
               <Route path="/about_us" element={<AboutPage />} />
+              <Route path="/form" element={<></>}></Route>
               <Route path="/404" element={<Page404 />} />
               <Route path="*" element={<Navigate to="/404" replace />} />
             </Routes>
