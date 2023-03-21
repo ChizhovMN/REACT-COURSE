@@ -50,6 +50,9 @@ a:focus-visible {
 a.active {
   color: red;
 }
+input {
+  border-radius: 5px;
+}
 
 @media (prefers-color-scheme: light) {
   :root {
