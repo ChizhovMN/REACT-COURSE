@@ -5,6 +5,7 @@ import './App.css';
 import MainPage from './pages/Main';
 import AboutPage from './pages/About';
 import Page404 from './pages/404';
+import FormPage from './pages/FormPage';
 import Footer from './components/Footer';
 import { AppStateProps, ProductsType } from 'types';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -56,7 +57,7 @@ class App extends React.Component<ProductsType, AppStateProps> {
                 }
               />
               <Route path="/about_us" element={<AboutPage />} />
-              <Route path="/form" element={<></>}></Route>
+              <Route path="/form" element={<FormPage />}></Route>
               <Route path="/404" element={<Page404 />} />
               <Route path="*" element={<Navigate to="/404" replace />} />
             </Routes>
