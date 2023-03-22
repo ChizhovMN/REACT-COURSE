@@ -1,5 +1,6 @@
 import React from 'react';
-import { FormProps } from 'types';
+import { VALIDATION } from '../../helpers/validation';
+import { checkDateValidation, checkTextValidation } from '../../helpers/helper';
 import CheckboxGroup from './CheckboxGroup';
 import DateInput from './DateInput';
 import ErrorMessage from './ErrorMessage';
@@ -9,17 +10,22 @@ import Submit from './Submit';
 import TextInput from './TextInput';
 import Uploader from './Uploader';
 
-type FromProps = '';
+type FormProps = '';
 type FormState = {
   textIsValid: boolean | null;
+  dateIsValid: boolean | null;
 };
 class Form extends React.Component<FormProps, FormState> {
   public textInput: React.RefObject<HTMLInputElement>;
+  public dateInput: React.RefObject<HTMLInputElement>;
+
   constructor(props: FormProps) {
     super(props);
     this.textInput = React.createRef();
+    this.dateInput = React.createRef();
     this.state = {
       textIsValid: null,
+      dateIsValid: null,
     };
   }
   componentDidMount(): void {
@@ -28,14 +34,7 @@ class Form extends React.Component<FormProps, FormState> {
 
   onChangeText = () => console.log(this.textInput.current?.value);
   render(): React.ReactNode {
-    const { textIsValid } = this.state;
-    const validation = {
-      textInput: {
-        regExp: /^([A-Z]){1,}([a-z]){1,}[ ]{1}([A-Z]){1,}([a-z]){1,}[,]{1}[0-9]{1,}/g,
-        wrongMsg: 'Write you text right! Example: "Name Surname,1" ',
-      },
-    };
-    const checkValidation = (value: string, regExp: RegExp) => !!value.match(regExp);
+    const { textIsValid, dateIsValid } = this.state;
     return (
       <>
         <form
@@ -43,23 +42,31 @@ class Form extends React.Component<FormProps, FormState> {
           onSubmit={(e) => {
             e.preventDefault();
             const textValue = this.textInput.current?.value;
-            this.setState({
+            const dateInput = this.dateInput.current?.value;
+            checkDateValidation(dateInput);
+            this.setState((prevState) => ({
+              ...prevState,
               textIsValid: textValue
-                ? checkValidation(textValue, validation.textInput.regExp)
+                ? checkTextValidation(textValue, VALIDATION.NAME_INPUT.regExp)
                 : null,
-            });
+              dateIsValid: dateInput ? checkDateValidation(dateInput) : null,
+            }));
           }}
         >
           <TextInput passedRef={this.textInput}>
             {typeof textIsValid === 'boolean' && !textIsValid && (
-              <ErrorMessage errorText={validation.textInput.wrongMsg} />
+              <ErrorMessage errorText={VALIDATION.NAME_INPUT.error} />
             )}
           </TextInput>
-          {/* <DateInput />
-          <Select />
-          <CheckboxGroup />
-          <RadioGroup />
-          <Uploader /> */}
+          <DateInput passedRef={this.dateInput}>
+            {typeof dateIsValid === 'boolean' && !dateIsValid && (
+              <ErrorMessage errorText={VALIDATION.DATE_INPUT.error} />
+            )}
+          </DateInput>
+          {/* <Select /> */}
+          {/* <CheckboxGroup /> */}
+          {/* <RadioGroup /> */}
+          {/* <Uploader /> */}
           <Submit />
         </form>
       </>
