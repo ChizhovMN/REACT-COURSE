@@ -3,7 +3,6 @@ import { InputProps, LabelProps } from 'types';
 import Label from './Label';
 class TextInput extends React.Component<InputProps> {
   render(): React.ReactNode {
-    console.log(this.props.passedRef.current?.value);
     const label: LabelProps = {
       htmlFor: 'name',
       classNames: ['text-label'],
