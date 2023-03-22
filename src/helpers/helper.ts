@@ -28,3 +28,7 @@ export const checkTextValidation = (value: string, regExp: RegExp) => {
   }
   return false;
 };
+
+export const checkSelectValidation = (value: string) => value !== 'default';
+
+export const checkCheckbox = (isCheck: boolean) => isCheck;

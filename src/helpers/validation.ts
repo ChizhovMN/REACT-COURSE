@@ -11,4 +11,10 @@ export const VALIDATION = {
     max: getDate(DELIVERY_END, 'max'),
     error: 'Select you date correctly - two days from now and in the range 30 days!',
   },
+  SELECT_INPUT: {
+    error: 'Choose your adress to delivery!',
+  },
+  CHECKBOX: {
+    error: 'Accept our terms. It is necessary! ',
+  },
 };
