@@ -25,3 +25,14 @@ export type MainPropsType = {
   products: CardType[];
   search: string;
 };
+
+export type InputProps = {
+  passedRef: React.RefObject<HTMLInputElement>;
+  children: React.ReactNode;
+};
+
+export type LabelProps = {
+  classNames: string[];
+  htmlFor: string;
+  labelText: string;
+};

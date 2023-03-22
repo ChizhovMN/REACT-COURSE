@@ -1,18 +1,17 @@
-import React, { Children } from 'react';
-
-type TextInputProps = {
-  passedRef: React.RefObject<HTMLInputElement>;
-  children: React.ReactNode;
-};
-
-class TextInput extends React.Component<TextInputProps> {
+import React from 'react';
+import { InputProps, LabelProps } from 'types';
+import Label from './Label';
+class TextInput extends React.Component<InputProps> {
   render(): React.ReactNode {
     console.log(this.props.passedRef.current?.value);
+    const label: LabelProps = {
+      htmlFor: 'name',
+      classNames: ['text-label'],
+      labelText: '1.Write your name,surname and zip-code',
+    };
     return (
       <div className="field">
-        <label className="label text-label" htmlFor="name">
-          1.Write your name,surname and zip-code
-        </label>
+        <Label htmlFor={label.htmlFor} classNames={label.classNames} labelText={label.labelText} />
         <input
           id="name"
           type={'text'}
