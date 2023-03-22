@@ -1,16 +1,11 @@
 import React from 'react';
 import { InputProps } from 'types';
 import { LABEL } from '../../helpers/const';
-import Label from './Label';
+import FieldWrapper from '../FieldWrapper';
 class TextInput extends React.Component<InputProps> {
   render(): React.ReactNode {
     return (
-      <div className="field">
-        <Label
-          htmlFor={LABEL.NAME_INPUT.htmlFor}
-          classNames={LABEL.NAME_INPUT.classNames}
-          labelText={LABEL.NAME_INPUT.labelText}
-        />
+      <FieldWrapper label={LABEL.NAME_INPUT}>
         <input
           id={LABEL.NAME_INPUT.htmlFor}
           type={'text'}
@@ -20,7 +15,7 @@ class TextInput extends React.Component<InputProps> {
           required
         />
         {this.props.children}
-      </div>
+      </FieldWrapper>
     );
   }
 }

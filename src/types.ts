@@ -30,9 +30,16 @@ export type InputProps = {
   passedRef: React.RefObject<HTMLInputElement>;
   children: React.ReactNode;
 };
-
+export type SelectProps = {
+  passedRef: React.RefObject<HTMLSelectElement>;
+  children: React.ReactNode;
+};
 export type LabelProps = {
   classNames: string[];
   htmlFor: string;
   labelText: string;
+};
+export type FieldWrapperProps = {
+  label: LabelProps;
+  children: React.ReactNode;
 };
