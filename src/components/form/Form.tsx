@@ -5,6 +5,7 @@ import {
   checkDateValidation,
   checkSelectValidation,
   checkTextValidation,
+  getActiveRadio,
 } from '../../helpers/helper';
 import CheckboxGroup from './CheckboxGroup';
 import DateInput from './DateInput';
@@ -27,6 +28,9 @@ class Form extends React.Component<FormProps, FormState> {
   public dateInput: React.RefObject<HTMLInputElement>;
   public selectOptions: React.RefObject<HTMLSelectElement>;
   public checkboxInput: React.RefObject<HTMLInputElement>;
+  public samsungRef: React.RefObject<HTMLInputElement>;
+  public appleRef: React.RefObject<HTMLInputElement>;
+  public huaweiRef: React.RefObject<HTMLInputElement>;
 
   constructor(props: FormProps) {
     super(props);
@@ -34,6 +38,10 @@ class Form extends React.Component<FormProps, FormState> {
     this.dateInput = React.createRef();
     this.selectOptions = React.createRef();
     this.checkboxInput = React.createRef();
+    this.samsungRef = React.createRef();
+    this.appleRef = React.createRef();
+    this.huaweiRef = React.createRef();
+
     this.state = {
       textIsValid: null,
       dateIsValid: null,
@@ -41,10 +49,9 @@ class Form extends React.Component<FormProps, FormState> {
       checkboxIsCheck: null,
     };
   }
-  onChangeText = () => console.log(this.textInput.current?.value);
   render(): React.ReactNode {
     const { textIsValid, dateIsValid, selectIsValid, checkboxIsCheck } = this.state;
-    console.log('selected', this.checkboxInput.current?.checked);
+    // console.log('VALUE', getActiveRadio([this.samsungRef, this.appleRef, this.huaweiRef]));
     return (
       <>
         <form
@@ -77,6 +84,11 @@ class Form extends React.Component<FormProps, FormState> {
               <ErrorMessage errorText={VALIDATION.NAME_INPUT.error} />
             )}
           </Select>
+          <RadioGroup
+            appleRef={this.appleRef}
+            samsungRef={this.samsungRef}
+            huaweiRef={this.huaweiRef}
+          />
           <DateInput passedRef={this.dateInput}>
             {typeof dateIsValid === 'boolean' && !dateIsValid && (
               <ErrorMessage errorText={VALIDATION.DATE_INPUT.error} />
@@ -87,7 +99,6 @@ class Form extends React.Component<FormProps, FormState> {
               <ErrorMessage errorText={VALIDATION.CHECKBOX.error} />
             )}
           </CheckboxGroup>
-          {/* <RadioGroup /> */}
           {/* <Uploader /> */}
           <Submit />
         </form>

@@ -34,6 +34,16 @@ export type SelectProps = {
   passedRef: React.RefObject<HTMLSelectElement>;
   children: React.ReactNode;
 };
+export type RadioGroupProps = {
+  appleRef: React.RefObject<HTMLInputElement>;
+  samsungRef: React.RefObject<HTMLInputElement>;
+  huaweiRef: React.RefObject<HTMLInputElement>;
+};
+export type RadioProps = {
+  passedRef: React.RefObject<HTMLInputElement>;
+  brand: string;
+  defaultCheck?: boolean;
+};
 export type LabelProps = {
   classNames: string[];
   htmlFor: string;

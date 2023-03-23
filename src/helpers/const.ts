@@ -27,19 +27,31 @@ export const LABEL = {
     classNames: ['text-label'],
     labelText: '1.Write your name,surname and zip-code.',
   },
-  DATE_INPUTE: {
-    labelText: '4.Select date to your delivery.',
-    htmlFor: 'date',
-    classNames: ['date-label'],
-  },
+
   SELECT_INPUT: {
     labelText: '2.Select your delivery adress.',
     htmlFor: 'country',
     classNames: ['select-label'],
   },
+  RADIO_GROUP: {
+    labelText: '3.Select brand to get a random device.',
+    htmlFor: 'brand',
+    classNames: ['radio-label'],
+  },
+  DATE_INPUTE: {
+    labelText: '4.Select date to your delivery.',
+    htmlFor: 'date',
+    classNames: ['date-label'],
+  },
   CHECKBOX: {
-    labelText: '6. Accept the agreement to randomly send the device',
+    labelText: '6. Accept the agreement that you get a random device!',
     htmlFor: 'checkbox',
     classNames: ['checkbox-label'],
   },
+};
+
+export const BRANDS = {
+  APPLE: 'Apple',
+  SAMSUNG: 'Samsung',
+  HUAWEI: 'Huawei',
 };
