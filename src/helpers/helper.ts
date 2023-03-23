@@ -33,5 +33,5 @@ export const checkSelectValidation = (value: string) => value !== 'default';
 
 export const checkCheckbox = (isCheck: boolean) => isCheck;
 
-export const getRadioValue = (radio: React.RefObject<HTMLInputElement>[]) =>
+export const getActiveRadio = (radio: React.RefObject<HTMLInputElement>[]) =>
   radio.find((item) => item.current?.checked);
