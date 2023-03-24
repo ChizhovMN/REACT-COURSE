@@ -22,6 +22,8 @@ type FormState = {
   dateIsValid: boolean | null;
   selectIsValid: boolean | null;
   checkboxIsCheck: boolean | null;
+  uploaderisValid: boolean | null;
+  showAccept: boolean;
 };
 class Form extends React.Component<FormProps, FormState> {
   public textInput: React.RefObject<HTMLInputElement>;
@@ -31,6 +33,7 @@ class Form extends React.Component<FormProps, FormState> {
   public samsungRef: React.RefObject<HTMLInputElement>;
   public appleRef: React.RefObject<HTMLInputElement>;
   public huaweiRef: React.RefObject<HTMLInputElement>;
+  public uploaderRef: React.RefObject<HTMLInputElement>;
 
   constructor(props: FormProps) {
     super(props);
@@ -41,17 +44,26 @@ class Form extends React.Component<FormProps, FormState> {
     this.samsungRef = React.createRef();
     this.appleRef = React.createRef();
     this.huaweiRef = React.createRef();
+    this.uploaderRef = React.createRef();
 
     this.state = {
       textIsValid: null,
       dateIsValid: null,
       selectIsValid: null,
       checkboxIsCheck: null,
+      uploaderisValid: null,
+      showAccept: false,
     };
   }
   render(): React.ReactNode {
-    const { textIsValid, dateIsValid, selectIsValid, checkboxIsCheck } = this.state;
-    // console.log('VALUE', getActiveRadio([this.samsungRef, this.appleRef, this.huaweiRef]));
+    const {
+      textIsValid,
+      dateIsValid,
+      selectIsValid,
+      checkboxIsCheck,
+      uploaderisValid,
+      showAccept,
+    } = this.state;
     return (
       <>
         <form
@@ -62,16 +74,29 @@ class Form extends React.Component<FormProps, FormState> {
             const dateInput = this.dateInput.current?.value;
             const selectValue = this.selectOptions.current?.value;
             const checkbox = this.checkboxInput.current?.checked;
+            const uploader = this.uploaderRef.current?.files?.length;
             checkDateValidation(dateInput);
-            this.setState((prevState) => ({
-              ...prevState,
-              textIsValid: textValue
-                ? checkTextValidation(textValue, VALIDATION.NAME_INPUT.regExp)
-                : null,
-              dateIsValid: dateInput ? checkDateValidation(dateInput) : null,
-              selectIsValid: selectValue ? checkSelectValidation(selectValue) : null,
-              checkboxIsCheck: checkbox ? checkCheckbox(checkbox) : null,
-            }));
+            this.setState(
+              (prevState) => ({
+                ...prevState,
+                textIsValid: textValue
+                  ? checkTextValidation(textValue, VALIDATION.NAME_INPUT.regExp)
+                  : null,
+                dateIsValid: dateInput ? checkDateValidation(dateInput) : null,
+                selectIsValid: selectValue ? checkSelectValidation(selectValue) : null,
+                checkboxIsCheck: checkbox ? checkCheckbox(checkbox) : null,
+                uploaderisValid: typeof uploader === 'number' ? !!uploader : null,
+              }),
+              () => {
+                if (this.handleFormValidation()) {
+                  this.setState({ showAccept: true });
+                  setTimeout(() => {
+                    this.setState({ showAccept: false });
+                    this.refreshForm();
+                  }, 1500);
+                }
+              }
+            );
           }}
         >
           <TextInput passedRef={this.textInput}>
@@ -81,7 +106,7 @@ class Form extends React.Component<FormProps, FormState> {
           </TextInput>
           <Select passedRef={this.selectOptions}>
             {typeof selectIsValid === 'boolean' && !selectIsValid && (
-              <ErrorMessage errorText={VALIDATION.NAME_INPUT.error} />
+              <ErrorMessage errorText={VALIDATION.SELECT_INPUT.error} />
             )}
           </Select>
           <RadioGroup
@@ -94,17 +119,38 @@ class Form extends React.Component<FormProps, FormState> {
               <ErrorMessage errorText={VALIDATION.DATE_INPUT.error} />
             )}
           </DateInput>
+          <Uploader passedRef={this.uploaderRef}>
+            {typeof uploaderisValid === 'boolean' && !uploaderisValid && (
+              <ErrorMessage errorText={VALIDATION.UPLOADER.error} />
+            )}
+          </Uploader>
           <CheckboxGroup passedRef={this.checkboxInput}>
             {typeof checkboxIsCheck === 'boolean' && !checkboxIsCheck && (
               <ErrorMessage errorText={VALIDATION.CHECKBOX.error} />
             )}
           </CheckboxGroup>
-          {/* <Uploader /> */}
           <Submit />
         </form>
+        {showAccept && <div className="accepted">YOUR DELIVERY ACCEPTED</div>}
       </>
     );
   }
+  handleFormValidation = () =>
+    this.state.textIsValid &&
+    this.state.selectIsValid &&
+    this.state.dateIsValid &&
+    this.state.uploaderisValid;
+
+  refreshForm = () => {
+    if (this.handleFormValidation()) {
+      this.textInput.current!.value = '';
+      this.selectOptions.current!.value = 'default';
+      this.samsungRef.current!.checked = true;
+      this.dateInput.current!.value = '';
+      this.uploaderRef.current!.value = '';
+      this.checkboxInput.current!.checked = false;
+    }
+  };
 }
 
 export default Form;
