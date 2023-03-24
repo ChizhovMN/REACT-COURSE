@@ -17,4 +17,7 @@ export const VALIDATION = {
   CHECKBOX: {
     error: 'Accept our terms. It is necessary! ',
   },
+  UPLOADER: {
+    error: 'Add your image!',
+  },
 };

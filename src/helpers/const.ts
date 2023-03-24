@@ -43,6 +43,11 @@ export const LABEL = {
     htmlFor: 'date',
     classNames: ['date-label'],
   },
+  UPLOADER: {
+    labelText: '5.Choose your photo for gift card!',
+    htmlFor: 'uploader',
+    classNames: ['uploader-leabel'],
+  },
   CHECKBOX: {
     labelText: '6. Accept the agreement that you get a random device!',
     htmlFor: 'checkbox',
