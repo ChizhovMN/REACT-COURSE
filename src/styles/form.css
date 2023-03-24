@@ -1,6 +1,21 @@
 .form-section {
   position: relative;
 }
+.delivery-table {
+  display: flex;
+  max-width: 1200px;
+  padding: 1rem;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  gap: 20px;
+}
+.delivery-card {
+  margin: 0 auto;
+}
+.delivery-card > div {
+  padding: 0px 5px 5px;
+  border-bottom: bisque 1px solid;
+}
 .form {
   display: flex;
   flex-direction: column;

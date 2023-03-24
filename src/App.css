@@ -49,7 +49,8 @@
   justify-content: center;
   flex: 1;
 }
-.card-item {
+.card-item,
+.delivery-card {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -61,7 +62,14 @@
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 }
-.card-item:hover {
+.delivery-card .brand {
+  position: relative;
+  display: block;
+  top: auto;
+  right: auto;
+}
+.card-item:hover,
+.delivery-card:hover {
   background-color: black;
   box-shadow: inset 0px 0.5px 1px 0;
 }

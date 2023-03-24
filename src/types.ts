@@ -53,3 +53,13 @@ export type FieldWrapperProps = {
   label: LabelProps;
   children: React.ReactNode;
 };
+
+export type FormCardType = {
+  img: string;
+  personalData: string;
+  location: string;
+  postIndex: string;
+  deliveryDate: string;
+  brand: string;
+};
+export type FormCardProps = FormCardType;

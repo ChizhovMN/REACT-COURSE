@@ -15,8 +15,11 @@ import Select from './Select';
 import Submit from './Submit';
 import TextInput from './TextInput';
 import Uploader from './Uploader';
+import { FormCardType } from 'types';
 
-type FormProps = '';
+type FormProps = {
+  handleAddCard: (card: FormCardType) => void;
+};
 type FormState = {
   textIsValid: boolean | null;
   dateIsValid: boolean | null;
@@ -64,6 +67,7 @@ class Form extends React.Component<FormProps, FormState> {
       uploaderisValid,
       showAccept,
     } = this.state;
+    const { handleAddCard } = this.props;
     return (
       <>
         <form
@@ -89,10 +93,21 @@ class Form extends React.Component<FormProps, FormState> {
               }),
               () => {
                 if (this.handleFormValidation()) {
+                  const [personalData, postIndex] = textValue?.split(',') ?? '';
                   this.setState({ showAccept: true });
+                  handleAddCard({
+                    img: '',
+                    deliveryDate: dateInput ?? '',
+                    location: selectValue ?? '',
+                    personalData: personalData,
+                    postIndex: postIndex,
+                    brand:
+                      getActiveRadio([this.appleRef, this.samsungRef, this.huaweiRef])?.current
+                        ?.value ?? '',
+                  });
+                  this.refreshForm();
                   setTimeout(() => {
                     this.setState({ showAccept: false });
-                    this.refreshForm();
                   }, 1500);
                 }
               }
