@@ -61,11 +61,11 @@
 }
 .accepted {
   position: absolute;
-  top: 50%;
+  top: 5rem;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   font-size: 250%;
-  padding: 1rem;
+  padding: 3rem;
   background-color: #0080008a;
   border-radius: 1rem;
 }
