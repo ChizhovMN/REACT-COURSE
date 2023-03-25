@@ -1,13 +1,13 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 class HeaderNav extends React.Component {
   render() {
     return (
       <nav className="nav">
-        <NavLink to="/">Main Page</NavLink>
-        <NavLink to="/about_us">About Us</NavLink>
-        <NavLink to="/form">Form</NavLink>
+        <Link to="/">Main Page</Link>
+        <Link to="/about_us">About Us</Link>
+        <Link to="/form">Form</Link>
       </nav>
     );
   }
