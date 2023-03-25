@@ -94,9 +94,11 @@ class Form extends React.Component<FormProps, FormState> {
               () => {
                 if (this.handleFormValidation()) {
                   const [personalData, postIndex] = textValue?.split(',') ?? '';
+                  const file = this.uploaderRef.current?.files as FileList;
+                  const img = URL.createObjectURL(file[0]);
                   this.setState({ showAccept: true });
                   handleAddCard({
-                    img: '',
+                    img: img,
                     deliveryDate: dateInput ?? '',
                     location: selectValue ?? '',
                     personalData: personalData,

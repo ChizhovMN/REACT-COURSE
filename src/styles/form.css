@@ -9,6 +9,12 @@
   margin: 0 auto;
   gap: 20px;
 }
+.delivery-img {
+  margin-bottom: 1rem;
+  border-image: bisque 1px solid;
+  border-radius: 0.5rem;
+  border: 1px solid bisque;
+}
 .delivery-card {
   margin: 0 auto;
 }

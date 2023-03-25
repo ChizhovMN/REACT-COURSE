@@ -6,7 +6,7 @@ class FormCard extends React.Component<FormCardProps> {
     return (
       <div className="delivery-card">
         <h2 className="delivery-header">PURCHASE</h2>
-        <img src={this.props.img} alt="delivery-img" />
+        <img src={this.props.img} alt="delivery-img" className="delivery-img" />
         <div className="name">Your name,surname: {this.props.personalData}</div>
         <div className="post">Your post index: {this.props.postIndex}</div>
         <div className="location">Your location {this.props.location}</div>
