@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react';
 import { CardType } from 'types';
 
-const Card: FunctionComponent<CardType> = ({
+const Card: FunctionComponent<Partial<CardType>> = ({
   thumbnail,
   brand,
   category,
