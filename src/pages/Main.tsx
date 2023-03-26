@@ -1,10 +1,35 @@
-import React, { FunctionComponent } from 'react';
-import { MainPropsType } from 'types';
+import React, { FunctionComponent, useCallback, useEffect, useState } from 'react';
+import { CardType, MainPropsType } from 'types';
 import Card from '../components/Card';
 
-const MainPage: FunctionComponent<MainPropsType> = ({ onChangeSearch, products, search }) => {
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = (event) =>
-    onChangeSearch(event.target.value);
+const lsKey = 'search-field';
+
+const MainPage: FunctionComponent<MainPropsType> = ({ products }) => {
+  const [search, setSearch] = useState<string>(localStorage.getItem(lsKey) ?? '');
+
+  useEffect(() => {
+    setSearch(localStorage.getItem(lsKey) ?? '');
+    return () => {
+      localStorage.setItem(lsKey, search);
+    };
+  }, []);
+
+  const cards =
+    search.length > 0
+      ? products.filter((item: CardType) =>
+          (['brand', 'title', 'category'] as const).some((card) =>
+            item[card].toLowerCase().includes(search.toLowerCase())
+          )
+        )
+      : products;
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
+    (event) =>
+      setSearch(() => {
+        localStorage.setItem(lsKey, event.target.value);
+        return event.target.value;
+      }),
+    []
+  );
   return (
     <>
       <div className="search-bar">
@@ -16,9 +41,10 @@ const MainPage: FunctionComponent<MainPropsType> = ({ onChangeSearch, products, 
           onChange={onChange}
         />
       </div>
+
       <div className="card-table">
-        {products.length > 0 ? (
-          products.map((card) => <Card key={card.id} {...card} />)
+        {cards.length > 0 ? (
+          cards.map((card) => <Card key={card.id} {...card} />)
         ) : (
           <div className="products-not-found">PRODUCTS NOT FOUND!</div>
         )}

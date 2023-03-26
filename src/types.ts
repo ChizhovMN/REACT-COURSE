@@ -21,9 +21,7 @@ export type AppStateProps = {
   cards: ProductsType;
 };
 export type MainPropsType = {
-  onChangeSearch: (search: string) => void;
   products: CardType[];
-  search: string;
 };
 
 export type InputProps = {
