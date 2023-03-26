@@ -8,7 +8,7 @@ interface Props extends WithRouterProps {
 interface State {
   hasError: boolean;
 }
-
+//This is Error Boundary and in react it's realized only with class!
 class ErrorBoundary extends Component<Props, State> {
   state: State = {
     hasError: false,
