@@ -36,7 +36,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-hooks": "^5.0.0-next-41b4714f1-20230328",
     "gh-pages": "^5.0.0",
     "happy-dom": "^8.9.0",
     "lint-staged": "^13.2.0",

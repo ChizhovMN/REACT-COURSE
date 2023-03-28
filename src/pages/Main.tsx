@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback, useEffect, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
 import { CardType, MainPropsType } from 'types';
 import Card from '../components/Card';
 
@@ -6,11 +6,11 @@ const lsKey = 'search-field';
 
 const MainPage: FunctionComponent<MainPropsType> = ({ products }) => {
   const [search, setSearch] = useState<string>(localStorage.getItem(lsKey) ?? '');
-
+  const searchRef = useRef(search);
   useEffect(() => {
-    setSearch(localStorage.getItem(lsKey) ?? '');
+    const cleanUp = searchRef.current;
     return () => {
-      localStorage.setItem(lsKey, search);
+      localStorage.setItem(lsKey, cleanUp);
     };
   }, []);
 
