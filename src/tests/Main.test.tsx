@@ -23,31 +23,13 @@ describe('Main section', async () => {
         },
       ],
     };
-    const exampleSearch = '';
-    const onChange = (value: string) => console.log(value);
-    render(
-      <MainPage
-        products={exampleProducts.products}
-        search={exampleSearch}
-        onChangeSearch={() => onChange(exampleSearch)}
-      />,
-      {
-        wrapper: BrowserRouter,
-      }
-    );
+    render(<MainPage products={exampleProducts.products} />, {
+      wrapper: BrowserRouter,
+    });
   });
   it('Should render Main section correctly without items', () => {
-    const exampleSearch = '';
-    const onChange = (value: string) => console.log(value);
-    render(
-      <MainPage
-        products={[]}
-        search={exampleSearch}
-        onChangeSearch={() => onChange(exampleSearch)}
-      />,
-      {
-        wrapper: BrowserRouter,
-      }
-    );
+    render(<MainPage products={[]} />, {
+      wrapper: BrowserRouter,
+    });
   });
 });
