@@ -1,3 +1,5 @@
+import { UseFormRegister } from 'react-hook-form';
+
 export type CardType = {
   id: number;
   title: string;
@@ -41,6 +43,14 @@ export type RadioProps = {
   passedRef: React.RefObject<HTMLInputElement>;
   brand: string;
   defaultCheck?: boolean;
+  register: UseFormRegister<{
+    name: string;
+    country: string;
+    brand: string;
+    date: string;
+    uploader: string;
+    checkbox: boolean;
+  }>;
 };
 export type LabelProps = {
   classNames: string[];
