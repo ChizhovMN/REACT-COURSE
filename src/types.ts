@@ -71,3 +71,15 @@ export type FormCardType = {
   brand: string;
 };
 export type FormCardProps = FormCardType;
+
+export type FormProps = {
+  handleAddCard: (card: FormCardType) => void;
+};
+export type FormState = {
+  name: string;
+  country: string;
+  brand: string;
+  date: string;
+  uploader: FileList | null;
+  checkbox: boolean;
+};

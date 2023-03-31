@@ -1,28 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { VALIDATION } from '../../helpers/validation';
 import { formatDate } from '../../helpers/helper';
 import ErrorMessage from './ErrorMessage';
-import { FormCardType } from 'types';
+import { FormCardType, FormProps, FormState } from 'types';
 import FieldWrapper from '../FieldWrapper';
 import { BRANDS, LABEL, LIST_OF_COUNTRIES } from '../../helpers/const';
 import Radio from './Radio';
 import { useForm } from 'react-hook-form';
 
-type FormProps = {
-  handleAddCard: (card: FormCardType) => void;
-};
-type FormState = {
-  name: string;
-  country: string;
-  brand: string;
-  date: string;
-  uploader: FileList | null;
-  checkbox: boolean;
-};
 const Form: React.FC<FormProps> = ({ handleAddCard }) => {
+  const [show, setShow] = useState(false);
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormState>({
     defaultValues: {
@@ -34,21 +25,41 @@ const Form: React.FC<FormProps> = ({ handleAddCard }) => {
       checkbox: false,
     },
   });
-
+  const onReset = () =>
+    reset({
+      name: '',
+      country: 'default',
+      brand: 'Samsung',
+      date: '',
+      uploader: null,
+      checkbox: false,
+    });
+  const onAddCard = ({
+    img,
+    personalData,
+    location,
+    postIndex,
+    deliveryDate,
+    brand,
+  }: FormCardType) =>
+    handleAddCard({
+      img: img,
+      deliveryDate: deliveryDate,
+      location: location,
+      personalData: personalData,
+      postIndex: postIndex,
+      brand: brand,
+    });
   const onSubmit = (data: FormState) => {
-    const [personalData, postIndex] = data.name?.split(',') ?? '';
-    if (data && data.uploader) {
-      const file = data.uploader[0];
+    const { name, country: location, brand, date: deliveryDate, uploader } = data;
+    const [personalData, postIndex] = name?.split(',') ?? '';
+    if (data && uploader) {
+      const file = uploader[0];
       const img = URL.createObjectURL(file);
-      handleAddCard({
-        img: img,
-        deliveryDate: data.date ?? '',
-        location: data.country ?? '',
-        personalData: personalData,
-        postIndex: postIndex,
-        brand: data.brand,
-      });
-      console.log('file', file);
+      onAddCard({ img, deliveryDate, brand, personalData, postIndex, location });
+      onReset();
+      setShow(true);
+      setTimeout(() => setShow(false), 2000);
     }
   };
   return (
@@ -119,7 +130,10 @@ const Form: React.FC<FormProps> = ({ handleAddCard }) => {
         />
         {errors.checkbox && <ErrorMessage errorText={LABEL.CHECKBOX.labelText} />}
       </FieldWrapper>
-      <button type="submit">ORDER!</button>
+      {show && <div className="accepted">YOUR DELIVERY ACCEPTED</div>}
+      <button type="submit" disabled={show}>
+        ORDER!
+      </button>
     </form>
   );
 };
