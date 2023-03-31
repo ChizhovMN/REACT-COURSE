@@ -1,5 +1,3 @@
-import { VALIDATION } from './validation';
-
 export const getDate = (date: number, minMax: 'max' | 'min') => {
   const dateString = new Date(date);
   const hours = dateString.getHours();
@@ -13,28 +11,6 @@ export const getDate = (date: number, minMax: 'max' | 'min') => {
       return date + dTime;
   }
 };
-
-export const checkDateValidation = (date: string | undefined) => {
-  if (date === undefined) return false;
-  const dateNumber = Date.parse(date);
-  if (isNaN(dateNumber)) return false;
-  return VALIDATION.DATE_INPUT.min < dateNumber && dateNumber < VALIDATION.DATE_INPUT.max;
-};
-
-export const checkTextValidation = (value: string, regExp: RegExp) => {
-  const match = value.match(regExp);
-  if (match) {
-    return match[0].length === value.length;
-  }
-  return false;
-};
-
-export const checkSelectValidation = (value: string) => value !== 'default';
-
-export const checkCheckbox = (isCheck: boolean) => isCheck;
-
-export const getActiveRadio = (radio: React.RefObject<HTMLInputElement>[]) =>
-  radio.find((item) => item.current?.checked);
 
 export function formatDate(inputDate: number) {
   const date = new Date(inputDate);

@@ -1,173 +1,127 @@
 import React from 'react';
 import { VALIDATION } from '../../helpers/validation';
-import {
-  checkCheckbox,
-  checkDateValidation,
-  checkSelectValidation,
-  checkTextValidation,
-  getActiveRadio,
-} from '../../helpers/helper';
-import CheckboxGroup from './CheckboxGroup';
-import DateInput from './DateInput';
+import { formatDate } from '../../helpers/helper';
 import ErrorMessage from './ErrorMessage';
-import RadioGroup from './RadioGroup';
-import Select from './Select';
-import Submit from './Submit';
-import TextInput from './TextInput';
-import Uploader from './Uploader';
 import { FormCardType } from 'types';
+import FieldWrapper from '../FieldWrapper';
+import { BRANDS, LABEL, LIST_OF_COUNTRIES } from '../../helpers/const';
+import Radio from './Radio';
+import { useForm } from 'react-hook-form';
 
 type FormProps = {
   handleAddCard: (card: FormCardType) => void;
 };
 type FormState = {
-  textIsValid: boolean | null;
-  dateIsValid: boolean | null;
-  selectIsValid: boolean | null;
-  checkboxIsCheck: boolean | null;
-  uploaderisValid: boolean | null;
-  showAccept: boolean;
+  name: string;
+  country: string;
+  brand: string;
+  date: string;
+  uploader: FileList | null;
+  checkbox: boolean;
 };
-class Form extends React.Component<FormProps, FormState> {
-  public textInput: React.RefObject<HTMLInputElement>;
-  public dateInput: React.RefObject<HTMLInputElement>;
-  public selectOptions: React.RefObject<HTMLSelectElement>;
-  public checkboxInput: React.RefObject<HTMLInputElement>;
-  public samsungRef: React.RefObject<HTMLInputElement>;
-  public appleRef: React.RefObject<HTMLInputElement>;
-  public huaweiRef: React.RefObject<HTMLInputElement>;
-  public uploaderRef: React.RefObject<HTMLInputElement>;
+const Form: React.FC<FormProps> = ({ handleAddCard }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormState>({
+    defaultValues: {
+      name: '',
+      country: 'default',
+      brand: 'Samsung',
+      date: '',
+      uploader: null,
+      checkbox: false,
+    },
+  });
 
-  constructor(props: FormProps) {
-    super(props);
-    this.textInput = React.createRef();
-    this.dateInput = React.createRef();
-    this.selectOptions = React.createRef();
-    this.checkboxInput = React.createRef();
-    this.samsungRef = React.createRef();
-    this.appleRef = React.createRef();
-    this.huaweiRef = React.createRef();
-    this.uploaderRef = React.createRef();
-
-    this.state = {
-      textIsValid: null,
-      dateIsValid: null,
-      selectIsValid: null,
-      checkboxIsCheck: null,
-      uploaderisValid: null,
-      showAccept: false,
-    };
-  }
-  render(): React.ReactNode {
-    const {
-      textIsValid,
-      dateIsValid,
-      selectIsValid,
-      checkboxIsCheck,
-      uploaderisValid,
-      showAccept,
-    } = this.state;
-    const { handleAddCard } = this.props;
-    return (
-      <>
-        <form
-          className="form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            const textValue = this.textInput.current?.value;
-            const dateInput = this.dateInput.current?.value;
-            const selectValue = this.selectOptions.current?.value;
-            const checkbox = this.checkboxInput.current?.checked;
-            const uploader = this.uploaderRef.current?.files?.length;
-            checkDateValidation(dateInput);
-            this.setState(
-              (prevState) => ({
-                ...prevState,
-                textIsValid: textValue
-                  ? checkTextValidation(textValue, VALIDATION.NAME_INPUT.regExp)
-                  : null,
-                dateIsValid: dateInput ? checkDateValidation(dateInput) : null,
-                selectIsValid: selectValue ? checkSelectValidation(selectValue) : null,
-                checkboxIsCheck: checkbox ? checkCheckbox(checkbox) : null,
-                uploaderisValid: typeof uploader === 'number' ? !!uploader : null,
-              }),
-              () => {
-                if (this.handleFormValidation()) {
-                  const [personalData, postIndex] = textValue?.split(',') ?? '';
-                  const file = this.uploaderRef.current?.files as FileList;
-                  const img = URL.createObjectURL(file[0]);
-                  this.setState({ showAccept: true });
-                  handleAddCard({
-                    img: img,
-                    deliveryDate: dateInput ?? '',
-                    location: selectValue ?? '',
-                    personalData: personalData,
-                    postIndex: postIndex,
-                    brand:
-                      getActiveRadio([this.appleRef, this.samsungRef, this.huaweiRef])?.current
-                        ?.value ?? '',
-                  });
-                  this.refreshForm();
-                  setTimeout(() => {
-                    this.setState({ showAccept: false });
-                  }, 1500);
-                }
-              }
-            );
-          }}
-        >
-          <TextInput passedRef={this.textInput}>
-            {typeof textIsValid === 'boolean' && !textIsValid && (
-              <ErrorMessage errorText={VALIDATION.NAME_INPUT.error} />
-            )}
-          </TextInput>
-          <Select passedRef={this.selectOptions}>
-            {typeof selectIsValid === 'boolean' && !selectIsValid && (
-              <ErrorMessage errorText={VALIDATION.SELECT_INPUT.error} />
-            )}
-          </Select>
-          <RadioGroup
-            appleRef={this.appleRef}
-            samsungRef={this.samsungRef}
-            huaweiRef={this.huaweiRef}
-          />
-          <DateInput passedRef={this.dateInput}>
-            {typeof dateIsValid === 'boolean' && !dateIsValid && (
-              <ErrorMessage errorText={VALIDATION.DATE_INPUT.error} />
-            )}
-          </DateInput>
-          <Uploader passedRef={this.uploaderRef}>
-            {typeof uploaderisValid === 'boolean' && !uploaderisValid && (
-              <ErrorMessage errorText={VALIDATION.UPLOADER.error} />
-            )}
-          </Uploader>
-          <CheckboxGroup passedRef={this.checkboxInput}>
-            {typeof checkboxIsCheck === 'boolean' && !checkboxIsCheck && (
-              <ErrorMessage errorText={VALIDATION.CHECKBOX.error} />
-            )}
-          </CheckboxGroup>
-          <Submit />
-        </form>
-        {showAccept && <div className="accepted">YOUR DELIVERY ACCEPTED</div>}
-      </>
-    );
-  }
-  handleFormValidation = () =>
-    this.state.textIsValid &&
-    this.state.selectIsValid &&
-    this.state.dateIsValid &&
-    this.state.uploaderisValid;
-
-  refreshForm = () => {
-    if (this.handleFormValidation()) {
-      this.textInput.current!.value = '';
-      this.selectOptions.current!.value = 'default';
-      this.samsungRef.current!.checked = true;
-      this.dateInput.current!.value = '';
-      this.uploaderRef.current!.value = '';
-      this.checkboxInput.current!.checked = false;
+  const onSubmit = (data: FormState) => {
+    const [personalData, postIndex] = data.name?.split(',') ?? '';
+    if (data && data.uploader) {
+      const file = data.uploader[0];
+      const img = URL.createObjectURL(file);
+      handleAddCard({
+        img: img,
+        deliveryDate: data.date ?? '',
+        location: data.country ?? '',
+        personalData: personalData,
+        postIndex: postIndex,
+        brand: data.brand,
+      });
+      console.log('file', file);
     }
   };
-}
+  return (
+    <form className="form" onSubmit={handleSubmit(onSubmit)}>
+      <FieldWrapper label={LABEL.NAME_INPUT}>
+        <input
+          type={'text'}
+          className="input-text input"
+          placeholder="Type here your name and zip-code..."
+          {...register('name', {
+            required: true,
+            pattern: VALIDATION.NAME_INPUT.regExp,
+          })}
+        />
+        {errors.name && <ErrorMessage errorText={VALIDATION.NAME_INPUT.error} />}
+      </FieldWrapper>
+      <FieldWrapper label={LABEL.SELECT_INPUT}>
+        <select
+          className="select"
+          defaultValue={'default'}
+          {...register('country', { validate: (value) => value !== 'default' })}
+        >
+          <option disabled value={'default'}>
+            SELECT COUNTRY
+          </option>
+          {LIST_OF_COUNTRIES.map((country) => (
+            <option key={country.id} value={country.country}>
+              {country.country}
+            </option>
+          ))}
+        </select>
+        {errors.country && <ErrorMessage errorText={VALIDATION.SELECT_INPUT.error} />}
+      </FieldWrapper>
+      <FieldWrapper label={LABEL.RADIO_GROUP}>
+        <fieldset>
+          <Radio brand={BRANDS.SAMSUNG} defaultCheck={true} register={register} />
+          <Radio brand={BRANDS.APPLE} register={register} />
+          <Radio brand={BRANDS.HUAWEI} register={register} />
+        </fieldset>
+      </FieldWrapper>
+      <FieldWrapper label={LABEL.DATE_INPUTE}>
+        <input
+          id={LABEL.DATE_INPUTE.htmlFor}
+          className="input-date input"
+          type={'date'}
+          {...register('date', {
+            required: true,
+            min: formatDate(VALIDATION.DATE_INPUT.min),
+            max: formatDate(VALIDATION.DATE_INPUT.max),
+          })}
+        />
+        {errors.date && <ErrorMessage errorText={VALIDATION.DATE_INPUT.error} />}
+      </FieldWrapper>
+      <FieldWrapper label={LABEL.UPLOADER}>
+        <input
+          type={'file'}
+          className="input-text input"
+          accept="image/*"
+          {...register('uploader', { required: true })}
+        />
+        {errors.uploader && <ErrorMessage errorText={VALIDATION.UPLOADER.error} />}
+      </FieldWrapper>
+      <FieldWrapper label={LABEL.CHECKBOX}>
+        <input
+          type={'checkbox'}
+          className="input-checkbox input"
+          {...register('checkbox', { required: true })}
+        />
+        {errors.checkbox && <ErrorMessage errorText={LABEL.CHECKBOX.labelText} />}
+      </FieldWrapper>
+      <button type="submit">ORDER!</button>
+    </form>
+  );
+};
 
 export default Form;

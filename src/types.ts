@@ -48,7 +48,7 @@ export type RadioProps = {
     country: string;
     brand: string;
     date: string;
-    uploader: string;
+    uploader: FileList | null;
     checkbox: boolean;
   }>;
 };
