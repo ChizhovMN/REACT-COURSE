@@ -1,30 +1,18 @@
 import React, { FunctionComponent } from 'react';
-import { CardType } from 'types';
+import { ResultData } from 'types';
 
-const Card: FunctionComponent<Partial<CardType>> = ({
-  thumbnail,
-  brand,
-  category,
-  title,
-  stock,
-  rating,
-  discountPercentage,
-  price,
-}) => (
+const Card: FunctionComponent<Partial<ResultData>> = ({ name, image, location, type }) => (
   <div className="card-item">
     <div className="card-img">
       <div className="img-overflow">
-        <img src={thumbnail} alt={brand} className="img" loading="lazy" />
+        <img src={image} alt={name} className="img" loading="lazy" />
       </div>
-      <div className="category">{category}</div>
-      <div className="brand">{brand}</div>
-      <div className="tittle">{title}</div>
-      <div className="stock">Stock:{stock}</div>
+      <div className="category">{name}</div>
     </div>
     <div className="info">
-      <div>Rating:{rating}</div>
-      <div>Discount:{discountPercentage}</div>
-      <div>Price:{price}</div>
+      <div>Name: {name}</div>
+      <div>Location: {location!.name}</div>
+      <div>Type: {type ? type : 'None'}</div>
     </div>
   </div>
 );

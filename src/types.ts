@@ -1,31 +1,5 @@
 import { UseFormRegister } from 'react-hook-form';
 
-export type CardType = {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  brand: string;
-  category: string;
-  thumbnail: string;
-  images: string[];
-};
-
-export type ProductsType = {
-  products: CardType[];
-};
-
-export type AppStateProps = {
-  search: string;
-  cards: ProductsType;
-};
-export type MainPropsType = {
-  products: CardType[];
-};
-
 export type InputProps = {
   passedRef: React.RefObject<HTMLInputElement>;
   children: React.ReactNode;
@@ -82,4 +56,32 @@ export type FormState = {
   date: string;
   uploader: FileList | null;
   checkbox: boolean;
+};
+
+export type RickAndMortyApi = {
+  info: {
+    count: number;
+    next: string;
+    pages: number;
+    prev: string | null;
+  };
+  results: ResultData[];
+};
+export type ResultData = {
+  id: number;
+  name: string;
+  status: string;
+  species: string;
+  type: string;
+  gender: string;
+  origin: Info;
+  location: Info;
+  image: string;
+  episode: string[];
+  created: string;
+  url: string;
+};
+type Info = {
+  name: string;
+  url: string;
 };
