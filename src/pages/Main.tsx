@@ -1,53 +1,37 @@
-import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
-import { CardType, MainPropsType } from 'types';
+import React, { FunctionComponent, Suspense, useEffect, useState } from 'react';
+import { RickAndMortyApi } from 'types';
 import Card from '../components/Card';
+import LoadData from '../components/LoadData';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 const lsKey = 'search-field';
 
-const MainPage: FunctionComponent<MainPropsType> = ({ products }) => {
+const MainPage: FunctionComponent = () => {
   const [search, setSearch] = useState<string>(localStorage.getItem(lsKey) ?? '');
-  const searchRef = useRef(search);
+  const [data, setData] = useState<RickAndMortyApi>();
+  const startLink = 'https://rickandmortyapi.com/api/character/';
+  const getLocation = (link: string): Promise<RickAndMortyApi> =>
+    fetch(link, { method: 'GET' })
+      .then((data) => data.json())
+      .catch((err) => console.log(err));
   useEffect(() => {
-    const cleanUp = searchRef.current;
-    return () => {
-      localStorage.setItem(lsKey, cleanUp);
-    };
+    getLocation(startLink).then((data) => {
+      setData(data);
+    });
   }, []);
-
-  const cards =
-    search.length > 0
-      ? products.filter((item: CardType) =>
-          (['brand', 'title', 'category'] as const).some((card) =>
-            item[card].toLowerCase().includes(search.toLowerCase())
-          )
-        )
-      : products;
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-    (event) =>
-      setSearch(() => {
-        localStorage.setItem(lsKey, event.target.value);
-        return event.target.value;
-      }),
-    []
-  );
   return (
     <>
       <div className="search-bar">
-        <input
-          type="search"
-          placeholder="Type here..."
-          className="search"
-          value={search}
-          onChange={onChange}
-        />
+        <input type="search" placeholder="Type here..." className="search" />
+        <div className="count">{data?.info.count}</div>
       </div>
-
       <div className="card-table">
-        {cards.length > 0 ? (
-          cards.map((card) => <Card key={card.id} {...card} />)
-        ) : (
-          <div className="products-not-found">PRODUCTS NOT FOUND!</div>
-        )}
+        <Suspense fallback={<LoadData />}>
+          {data?.results.map((item) => {
+            const { name, location, type, image } = item;
+            return <Card key={item.id} name={name} location={location} type={type} image={image} />;
+          })}
+        </Suspense>
       </div>
     </>
   );
