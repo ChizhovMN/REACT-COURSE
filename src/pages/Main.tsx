@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { CardType, MainPropsType } from 'types';
 import Card from '../components/Card';
 
@@ -6,14 +6,11 @@ const lsKey = 'search-field';
 
 const MainPage: FunctionComponent<MainPropsType> = ({ products }) => {
   const [search, setSearch] = useState<string>(localStorage.getItem(lsKey) ?? '');
-  const searchRef = useRef(search);
   useEffect(() => {
-    const cleanUp = searchRef.current;
     return () => {
-      localStorage.setItem(lsKey, cleanUp);
+      localStorage.setItem(lsKey, search);
     };
-  }, []);
-
+  }, [search]);
   const cards =
     search.length > 0
       ? products.filter((item: CardType) =>
@@ -22,14 +19,12 @@ const MainPage: FunctionComponent<MainPropsType> = ({ products }) => {
           )
         )
       : products;
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-    (event) =>
-      setSearch(() => {
-        localStorage.setItem(lsKey, event.target.value);
-        return event.target.value;
-      }),
-    []
-  );
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    console.log('onchange');
+    setSearch(event.target.value);
+    localStorage.setItem(lsKey, event.target.value);
+  };
+
   return (
     <>
       <div className="search-bar">
