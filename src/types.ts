@@ -63,7 +63,7 @@ export type RickAndMortyApi = {
     count: number;
     next: string;
     pages: number;
-    prev: string | null;
+    prev: string;
   };
   results: ResultData[];
 };
