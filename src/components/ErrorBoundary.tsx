@@ -23,8 +23,7 @@ class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      console.log('ERROR. YOU WAS REDIRECTED TO MAIN PAGE');
-      this.props.navigate('/');
+      return 'Ooops! something go wrong! Problem with server or not!';
     }
 
     return this.props.children;
