@@ -181,3 +181,7 @@
   padding: 2rem;
   justify-content: space-between;
 }
+.loading {
+  color: yellow;
+  font-size: 8rem;
+}
