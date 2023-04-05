@@ -96,3 +96,7 @@ export type LocationApi = {
   url: string;
   created: string;
 };
+export type SearchProps = {
+  handleSearch: (search: string) => void;
+  search: string;
+};
