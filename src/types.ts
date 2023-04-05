@@ -81,7 +81,18 @@ export type ResultData = {
   created: string;
   url: string;
 };
+export type ModalCardProps = ResultData & { onClick: () => void };
 type Info = {
   name: string;
   url: string;
+};
+
+export type LocationApi = {
+  id: number;
+  name: string;
+  type: string;
+  dimension: string;
+  residents: string[];
+  url: string;
+  created: string;
 };
