@@ -3,18 +3,16 @@ import { RickAndMortyApi } from 'types';
 import LoadData from '../components/LoadData';
 import ErrorBoundary from '../components/ErrorBoundary';
 import MainTable from '../components/MainTable';
-import { useLocation } from 'react-router-dom';
 import Search from '../components/Search';
 
-const lsKey = 'search-field';
+const lsKey = 'SEARCH_BAR';
 
 const MainPage: FunctionComponent = () => {
-  const location = useLocation();
   const [search, setSearch] = useState<string>(localStorage.getItem(lsKey) ?? '');
-  const [page, setPage] = useState<number>(1);
   const [data, setData] = useState<RickAndMortyApi>();
+  const [fetchError, setFetchError] = useState<boolean>(false);
   const searchLink = !!search ? `&name=${search}` : '';
-  const startLink = `https://rickandmortyapi.com/api/character/?pages=${page}${searchLink}`;
+  const startLink = `https://rickandmortyapi.com/api/character/?pages=1${searchLink}`;
 
   const getData = (link: string): Promise<RickAndMortyApi> => {
     return fetch(link, { method: 'GET' })
@@ -23,8 +21,12 @@ const MainPage: FunctionComponent = () => {
   };
   useEffect(() => {
     getData(startLink).then((data) => {
-      console.log('data', data);
-      setData(data);
+      if (data.info && data.results) {
+        setData(data);
+        setFetchError(false);
+      } else {
+        setFetchError(true);
+      }
     });
   }, [startLink]);
   const handleSearch = (search: string) => {
@@ -37,29 +39,30 @@ const MainPage: FunctionComponent = () => {
       getData(link).then((data) => setData(data));
     }
   };
-  const characters = data ? data?.info!.count : 0;
-  const allPages = data ? data?.info!.pages : 0;
+  const checkDisableBtn = (direction: 'prev' | 'next') =>
+    !fetchError ? checkNull(data?.info![direction]) : true;
+  const checkInfo = (info: 'count' | 'pages') => (!fetchError ? data?.info![info] : 0);
   return (
     <>
       <div className="search-bar">
         <div className="searchbar-info">
-          <div className="count">All characters: {characters}</div>
-          <div className="pages">All pages: {allPages}</div>
+          <div className="count">All characters: {checkInfo('count')}</div>
+          <div className="pages">All pages: {checkInfo('pages')}</div>
         </div>
         <Search handleSearch={handleSearch} search={search} />
       </div>
       <div className="card-table">
         <ErrorBoundary>
           <Suspense fallback={<LoadData />}>
-            {!!data?.results ? <MainTable {...data} /> : <div>NOT FOUND</div>}
+            {!fetchError ? <MainTable {...data} /> : <div>NOT FOUND</div>}
           </Suspense>
         </ErrorBoundary>
       </div>
       <div className="btn-group">
-        <button disabled={checkNull(data?.info!.prev)} onClick={() => changePage(data?.info.prev)}>
+        <button disabled={checkDisableBtn('prev')} onClick={() => changePage(data?.info.prev)}>
           Prev Page
         </button>
-        <button disabled={checkNull(data?.info!.next)} onClick={() => changePage(data?.info.next)}>
+        <button disabled={checkDisableBtn('next')} onClick={() => changePage(data?.info.next)}>
           Next Page
         </button>
       </div>
