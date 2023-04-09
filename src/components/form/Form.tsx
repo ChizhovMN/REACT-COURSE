@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import { VALIDATION } from '../../helpers/validation';
 import { formatDate } from '../../helpers/helper';
 import ErrorMessage from './ErrorMessage';
-import { FormCardType, FormProps, FormState } from 'types';
+import { FormCardType, FormState } from 'types';
 import FieldWrapper from '../FieldWrapper';
 import { BRANDS, LABEL, LIST_OF_COUNTRIES } from '../../helpers/const';
 import Radio from './Radio';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { AddFormCard } from '../../store/actions';
 
-const Form: React.FC<FormProps> = ({ handleAddCard }) => {
+const Form = () => {
   const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -42,14 +45,17 @@ const Form: React.FC<FormProps> = ({ handleAddCard }) => {
     deliveryDate,
     brand,
   }: FormCardType) =>
-    handleAddCard({
-      img: img,
-      deliveryDate: deliveryDate,
-      location: location,
-      personalData: personalData,
-      postIndex: postIndex,
-      brand: brand,
-    });
+    dispatch(
+      AddFormCard({
+        img: img,
+        deliveryDate: deliveryDate,
+        location: location,
+        personalData: personalData,
+        postIndex: postIndex,
+        brand: brand,
+      })
+    );
+
   const onSubmit = (data: FormState) => {
     const { name, country: location, brand, date: deliveryDate, uploader } = data;
     const [personalData, postIndex] = name?.split(',') ?? '';
