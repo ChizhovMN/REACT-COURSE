@@ -1,25 +1,27 @@
 import { configureStore, createReducer } from '@reduxjs/toolkit';
-import { FormCardType, RickAndMortyApi } from 'types';
-import { AddFormCard, LoadApiData, SearchFieldValue } from './actions';
+import { FormCardType } from 'types';
+import { AddFormCard, AddSearchFieldValue, changePageValue } from './actions';
+import { rickAndMorty } from './rickAndMorty';
+import { setupListeners } from '@reduxjs/toolkit/dist/query';
 
 export type ROOT_STORE_TYPE = {
-  api: Partial<RickAndMortyApi>;
   search: string;
   formCards: FormCardType[];
+  page: string;
 };
 
 const INITIAL_STORE: ROOT_STORE_TYPE = {
-  api: {},
   search: '',
   formCards: [],
+  page: '1',
 };
 
 const reducer = createReducer(INITIAL_STORE, (builder) => {
   builder
-    .addCase(LoadApiData, (state, action) => {
-      Object.assign(state.api, action.payload);
+    .addCase(changePageValue, (state, action) => {
+      state.page = action.payload;
     })
-    .addCase(SearchFieldValue, (state, action) => {
+    .addCase(AddSearchFieldValue, (state, action) => {
       state.search = action.payload;
     })
     .addCase(AddFormCard, (state, action) => {
@@ -27,6 +29,10 @@ const reducer = createReducer(INITIAL_STORE, (builder) => {
     });
 });
 
-export const store = configureStore({ reducer: reducer });
-console.log('store', store);
+export const store = configureStore({
+  reducer: { [rickAndMorty.reducerPath]: rickAndMorty.reducer, client: reducer },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(rickAndMorty.middleware),
+});
 export type AppDispatch = typeof store.dispatch;
+
+setupListeners(store.dispatch);

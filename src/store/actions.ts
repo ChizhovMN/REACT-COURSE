@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
-import { FormCardType, RickAndMortyApi } from 'types';
+import { FormCardType } from 'types';
 
-export const LoadApiData = createAction<RickAndMortyApi>('react-redux/loadData');
-export const SearchFieldValue = createAction<string>('react-redux/SearchFieldValue');
+export const changePageValue = createAction<string>('react-redux/changePage');
+export const AddSearchFieldValue = createAction<string>('react-redux/AddSearchFieldValue');
 export const AddFormCard = createAction<FormCardType>('react-redux/addFormCard');
