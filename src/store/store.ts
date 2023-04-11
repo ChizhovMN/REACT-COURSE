@@ -11,9 +11,9 @@ export type ROOT_STORE_TYPE = {
 };
 
 const INITIAL_STORE: ROOT_STORE_TYPE = {
-  search: '',
+  search: new URLSearchParams(window.location.search).get('search') ?? '',
   formCards: [],
-  page: '1',
+  page: new URLSearchParams(window.location.search).get('pages') ?? '1',
 };
 
 const reducer = createReducer(INITIAL_STORE, (builder) => {
@@ -33,6 +33,14 @@ export const store = configureStore({
   reducer: { [rickAndMorty.reducerPath]: rickAndMorty.reducer, client: reducer },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(rickAndMorty.middleware),
 });
-export type AppDispatch = typeof store.dispatch;
+import { combineReducers } from '@reduxjs/toolkit';
+const rootReducer = combineReducers({
+  client: reducer,
+  [rickAndMorty.reducerPath]: rickAndMorty.reducer,
+});
+export type RootState = ReturnType<typeof rootReducer>;
+// export type RootState = ReturnType<typeof store.getState>;
+export default store;
+// export type AppDispatch = typeof store.dispatch;
 
 setupListeners(store.dispatch);
