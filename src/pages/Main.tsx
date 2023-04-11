@@ -1,68 +1,62 @@
-import React, { FunctionComponent, Suspense, useEffect, useState } from 'react';
-import { RickAndMortyApi } from 'types';
+import React, { FunctionComponent, Suspense, useEffect } from 'react';
 import LoadData from '../components/LoadData';
 import ErrorBoundary from '../components/ErrorBoundary';
 import MainTable from '../components/MainTable';
 import Search from '../components/Search';
-
-const lsKey = 'SEARCH_BAR';
+import { useDispatch, useSelector } from 'react-redux';
+import { changePageValue } from '../store/actions';
+import { getPageValue, getSearchFieldValue } from '../store/selectors';
+import { useGetCharactersQuery } from '../store/rickAndMorty';
+import { useSearchParams } from 'react-router-dom';
 
 const MainPage: FunctionComponent = () => {
-  const [search, setSearch] = useState<string>(localStorage.getItem(lsKey) ?? '');
-  const [data, setData] = useState<RickAndMortyApi>();
-  const [fetchError, setFetchError] = useState<boolean>(false);
-  const searchLink = !!search ? `&name=${search}` : '';
-  const startLink = `https://rickandmortyapi.com/api/character/?pages=1${searchLink}`;
+  const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const search = useSelector(getSearchFieldValue);
+  const pages = useSelector(getPageValue);
+  const { data, error } = useGetCharactersQuery([pages, search]);
 
-  const getData = (link: string): Promise<RickAndMortyApi> => {
-    return fetch(link, { method: 'GET' })
-      .then((data) => data.json())
-      .catch((err) => console.log(err));
-  };
-  useEffect(() => {
-    getData(startLink).then((data) => {
-      if (data.info && data.results) {
-        setData(data);
-        setFetchError(false);
-      } else {
-        setFetchError(true);
-      }
-    });
-  }, [startLink]);
-  const handleSearch = (search: string) => {
-    setSearch(search);
-    getData(startLink);
-  };
-  const checkNull = (check: string | undefined) => check === null;
-  const changePage = (link: string | undefined) => {
-    if (!!link) {
-      getData(link).then((data) => setData(data));
+  const changePage = (direction: 'next' | 'prev') => {
+    if (data?.info[direction]) {
+      const pages = data.info[direction].split('?')[1].split('&')[0].split('=')[1];
+      dispatch(changePageValue(pages));
     }
   };
-  const checkDisableBtn = (direction: 'prev' | 'next') =>
-    !fetchError ? checkNull(data?.info![direction]) : true;
-  const checkInfo = (info: 'count' | 'pages') => (!fetchError ? data?.info![info] : 0);
+  useEffect(() => {
+    if (error) {
+      dispatch(changePageValue('1'));
+    }
+  }, [dispatch, search, error]);
+  useEffect(() => {
+    searchParams.set('pages', pages);
+    if (search.length > 0) {
+      searchParams.set('search', search);
+    } else {
+      searchParams.delete('search');
+    }
+    setSearchParams(searchParams);
+  }, [pages, setSearchParams, search, searchParams]);
   return (
     <>
       <div className="search-bar">
         <div className="searchbar-info">
-          <div className="count">All characters: {checkInfo('count')}</div>
-          <div className="pages">All pages: {checkInfo('pages')}</div>
+          <div className="count">All characters: {error ? 0 : data?.info.count}</div>
+          <div className="pages">All pages: {error ? 0 : data?.info.pages}</div>
         </div>
-        <Search handleSearch={handleSearch} search={search} />
+        <Search />
       </div>
       <div className="card-table">
         <ErrorBoundary>
           <Suspense fallback={<LoadData />}>
-            {!fetchError ? <MainTable {...data} /> : <div>NOT FOUND</div>}
+            {!error ? <MainTable {...data} /> : <div>NOT FOUND</div>}
           </Suspense>
         </ErrorBoundary>
       </div>
       <div className="btn-group">
-        <button disabled={checkDisableBtn('prev')} onClick={() => changePage(data?.info.prev)}>
+        <button disabled={data?.info.prev ? false : true} onClick={() => changePage('prev')}>
           Prev Page
         </button>
-        <button disabled={checkDisableBtn('next')} onClick={() => changePage(data?.info.next)}>
+        <button disabled={data?.info.next ? false : true} onClick={() => changePage('next')}>
           Next Page
         </button>
       </div>

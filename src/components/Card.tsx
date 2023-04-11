@@ -1,23 +1,17 @@
 import React, { FunctionComponent, useState } from 'react';
 import { ResultData } from 'types';
 import ModalCard from './ModalCard';
-import LoadData from './LoadData';
 
-const Card: FunctionComponent<Partial<ResultData>> = ({ name, image, location, type, id }) => {
-  const [cardInfo, setCardInfo] = useState<ResultData>();
+const Card: FunctionComponent<Partial<ResultData>> = ({
+  status,
+  name,
+  image,
+  location,
+  type,
+  id,
+}) => {
   const [show, setShow] = useState<boolean>(false);
-  const [isLoading, setLoading] = useState<boolean>(false);
-  const getCardData = (): Promise<ResultData> => {
-    setLoading(true);
-    return fetch(`https://rickandmortyapi.com/api/character/${id}`)
-      .then((data) => {
-        setLoading(false);
-        return data.json();
-      })
-      .catch((err) => console.log(err));
-  };
   const handleCardInfo = () => {
-    if (!cardInfo) getCardData().then((data) => setCardInfo(data));
     setShow(true);
   };
   const handleCloseModal = () => setShow(false);
@@ -28,7 +22,7 @@ const Card: FunctionComponent<Partial<ResultData>> = ({ name, image, location, t
           <div className="img-overflow">
             <img src={image} alt={name} className="img" loading="lazy" />
           </div>
-          <div className={`category ${show ? 'hide' : ''}`}>{name}</div>
+          <div className={`category ${show ? 'hide' : ''}`}>{name ? name : ''}</div>
         </div>
 
         <div className={`info ${show ? 'hide' : ''}`}>
@@ -36,13 +30,8 @@ const Card: FunctionComponent<Partial<ResultData>> = ({ name, image, location, t
           <div>Location: {location!.name}</div>
           <div>Type: {type ? type : 'None'}</div>
         </div>
-        {isLoading && (
-          <div className="alert">
-            <LoadData />
-          </div>
-        )}
       </div>
-      {show && cardInfo && <ModalCard {...cardInfo} onClick={handleCloseModal} />}
+      {show && <ModalCard id={id} status={status} location={location} onClick={handleCloseModal} />}
     </div>
   );
 };
