@@ -14,7 +14,6 @@ const MainPage: FunctionComponent = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const search = useSelector(getSearchFieldValue);
   const pages = useSelector(getPageValue);
-  console.log('pages', pages);
   const { data, error } = useGetCharactersQuery([pages, search]);
 
   const changePage = (direction: 'next' | 'prev') => {
