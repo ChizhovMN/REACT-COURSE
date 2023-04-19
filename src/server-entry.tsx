@@ -6,15 +6,15 @@ import { Provider } from 'react-redux';
 import store from './store/store';
 import './index.css';
 
-export default function renderApp(url: string, opts?: RenderToPipeableStreamOptions) {
+export function renderApp(url: string, opts?: RenderToPipeableStreamOptions) {
   const stream = renderToPipeableStream(
-    <React.StrictMode>
-      <Provider store={store}>
-        <StaticRouter location={url}>
+    <StaticRouter location={url}>
+      <React.StrictMode>
+        <Provider store={store}>
           <App />
-        </StaticRouter>
-      </Provider>
-    </React.StrictMode>,
+        </Provider>
+      </React.StrictMode>
+    </StaticRouter>,
     opts
   );
   return stream;

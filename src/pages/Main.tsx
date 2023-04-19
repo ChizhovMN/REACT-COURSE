@@ -1,4 +1,4 @@
-import React, { FunctionComponent, Suspense, useEffect } from 'react';
+import React, { FunctionComponent, Suspense, useEffect, useState } from 'react';
 import LoadData from '../components/LoadData';
 import ErrorBoundary from '../components/ErrorBoundary';
 import MainTable from '../components/MainTable';
@@ -12,6 +12,7 @@ import { useSearchParams } from 'react-router-dom';
 const MainPage: FunctionComponent = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isBrowser, setIsBrowser] = useState(false);
   const search = useSelector(getSearchFieldValue);
   const pages = useSelector(getPageValue);
   const { data, error } = useGetCharactersQuery([pages, search]);
@@ -22,6 +23,7 @@ const MainPage: FunctionComponent = () => {
       dispatch(changePageValue(pages));
     }
   };
+  useEffect(() => setIsBrowser(true));
   useEffect(() => {
     if (error) {
       dispatch(changePageValue('1'));
@@ -38,28 +40,32 @@ const MainPage: FunctionComponent = () => {
   }, [pages, setSearchParams, search, searchParams]);
   return (
     <>
-      <div className="search-bar">
-        <div className="searchbar-info">
-          <div className="count">All characters: {error ? 0 : data?.info.count}</div>
-          <div className="pages">All pages: {error ? 0 : data?.info.pages}</div>
-        </div>
-        <Search />
-      </div>
-      <div className="card-table">
-        <ErrorBoundary>
-          <Suspense fallback={<LoadData />}>
-            {!error ? <MainTable {...data} /> : <div>NOT FOUND</div>}
-          </Suspense>
-        </ErrorBoundary>
-      </div>
-      <div className="btn-group">
-        <button disabled={data?.info.prev ? false : true} onClick={() => changePage('prev')}>
-          Prev Page
-        </button>
-        <button disabled={data?.info.next ? false : true} onClick={() => changePage('next')}>
-          Next Page
-        </button>
-      </div>
+      {isBrowser ? (
+        <>
+          <div className="search-bar">
+            <div className="searchbar-info">
+              <div className="count">All characters: {error ? 0 : data?.info.count}</div>
+              <div className="pages">All pages: {error ? 0 : data?.info.pages}</div>
+            </div>
+            <Search />
+          </div>
+          <div className="card-table">
+            <ErrorBoundary>
+              <Suspense fallback={<LoadData />}>
+                {!error ? <MainTable {...data} /> : <div>NOT FOUND</div>}
+              </Suspense>
+            </ErrorBoundary>
+          </div>
+          <div className="btn-group">
+            <button disabled={data?.info.prev ? false : true} onClick={() => changePage('prev')}>
+              Prev Page
+            </button>
+            <button disabled={data?.info.next ? false : true} onClick={() => changePage('next')}>
+              Next Page
+            </button>
+          </div>
+        </>
+      ) : null}
     </>
   );
 };
