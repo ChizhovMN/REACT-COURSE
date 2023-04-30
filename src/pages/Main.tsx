@@ -23,7 +23,7 @@ const MainPage: FunctionComponent = () => {
       dispatch(changePageValue(pages));
     }
   };
-  useEffect(() => setIsBrowser(true));
+  useEffect(() => setIsBrowser(true), [setIsBrowser]);
   useEffect(() => {
     if (error) {
       dispatch(changePageValue('1'));
