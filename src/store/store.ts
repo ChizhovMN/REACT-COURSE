@@ -11,9 +11,9 @@ export type ROOT_STORE_TYPE = {
 };
 
 const INITIAL_STORE: ROOT_STORE_TYPE = {
-  search: new URLSearchParams(window.location.search).get('search') ?? '',
+  search: '',
   formCards: [],
-  page: new URLSearchParams(window.location.search).get('pages') ?? '1',
+  page: '1',
 };
 
 const reducer = createReducer(INITIAL_STORE, (builder) => {
